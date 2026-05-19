@@ -16,10 +16,6 @@ from config import (
 # Import your pipeline
 from pipeline import run_detection_pipeline, run_packaging_pipeline
 
-# Import model loading functions
-from modules.detection import load_model
-from modules.material import load_material_model
-
 # ---------------- GLOBAL FASTAPI APP ----------------
 app = FastAPI(title="SmartPack AI Backend")
 
@@ -41,24 +37,6 @@ app.mount("/outputs", StaticFiles(directory=str(OUTPUT_FOLDER)), name="outputs")
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-# ---------------- STARTUP EVENT (LOAD MODELS ONCE) ----------------
-@app.on_event("startup")
-def load_models():
-    print("Loading Detection Model...")
-    try:
-        load_model()
-    except Exception as e:
-        print(f"[WARNING] Could not load detection weights: {e}")
-
-    print("Loading Material Model...")
-    try:
-        load_material_model()
-    except Exception as e:
-        print(f"[WARNING] Could not load material weights: {e}")
-
-    print("All models loaded successfully!")
 
 
 # ---------------- ROOT ENDPOINT ----------------
