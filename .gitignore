@@ -22,6 +22,7 @@ Thumbs.db
 backend/outputs/
 backend/uploaded_images/
 # Heavy AI Models
-models/
+# Catch-all for heavy binaries
 *.pt
 *.pth
+backend/models/
