@@ -21,3 +21,4 @@ backend/uploads/
 Thumbs.db
 backend/outputs/
 backend/uploaded_images/
+models/
