@@ -54,7 +54,7 @@ import { formatDimension } from "./utils/formatDimension";
 
 const env = (import.meta as any).env || {};
 const API_URL =
-  env.VITE_API_URL || env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+  env.VITE_API_URL || env.NEXT_PUBLIC_API_URL || "https://packsmart-1-bs3l.onrender.com";
 
 type Page =
   | "landing"
