@@ -52,8 +52,9 @@ import BoxDieline from "./components/BoxDieline";
 import PackSmart3D, { BoxType } from "./components/PackSmart3D";
 import { formatDimension } from "./utils/formatDimension";
 
+const env = (import.meta as any).env || {};
 const API_URL =
-  (import.meta as any).env.VITE_API_URL || "http://localhost:8000";
+  env.VITE_API_URL || env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 type Page =
   | "landing"

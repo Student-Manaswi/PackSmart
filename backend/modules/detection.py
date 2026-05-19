@@ -4,6 +4,9 @@ import uuid
 import numpy as np
 from ultralytics import YOLO
 
+from config import DETECTION_MODEL_FILENAME, DETECTION_MODEL_SOURCE
+from modules.model_loader import ensure_local_model_file
+
 _model = None
 
 # ------------------------Model Loading------------------------
@@ -11,10 +14,11 @@ def load_model(model_path=None):
     global _model
     if _model is None:
         if model_path is None:
-            # Go up 2 levels from backend/modules to root
-            base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-            model_path = os.path.join(base_dir, "models", "best.pt")
-        _model = YOLO(model_path)
+            model_path = ensure_local_model_file(
+                DETECTION_MODEL_SOURCE,
+                DETECTION_MODEL_FILENAME,
+            )
+        _model = YOLO(str(model_path))
     return _model
 
 
@@ -37,6 +41,9 @@ def detect_front_object(image_path, save_dir="outputs"):
     img = cv2.imread(image_path)
     if img is None:
         raise ValueError("Front image not found")
+
+    if _model is None:
+        load_model()
 
     # run detection
     results = _model(img, conf=0.37)

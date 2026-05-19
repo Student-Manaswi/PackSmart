@@ -2,8 +2,16 @@ import os
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from config import DevelopmentConfig
 from typing import Optional
+
+from config import (
+    ALLOWED_EXTENSIONS,
+    CORS_ALLOW_HEADERS,
+    CORS_ALLOW_METHODS,
+    CORS_ALLOW_ORIGINS,
+    OUTPUT_FOLDER,
+    UPLOAD_FOLDER,
+)
 
 # Import your pipeline
 from pipeline import run_detection_pipeline, run_packaging_pipeline
@@ -18,21 +26,21 @@ app = FastAPI(title="SmartPack AI Backend")
 # ---------------- ENABLE CORS ----------------
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=CORS_ALLOW_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=CORS_ALLOW_METHODS,
+    allow_headers=CORS_ALLOW_HEADERS,
 )
 
-os.makedirs("outputs", exist_ok=True)
-os.makedirs("uploaded_images", exist_ok=True)
+os.makedirs(str(OUTPUT_FOLDER), exist_ok=True)
+os.makedirs(str(UPLOAD_FOLDER), exist_ok=True)
 
-app.mount("/outputs", StaticFiles(directory="outputs"), name="outputs")
+app.mount("/outputs", StaticFiles(directory=str(OUTPUT_FOLDER)), name="outputs")
 
 # ---------------- HELPER FUNCTION ----------------
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in DevelopmentConfig.ALLOWED_EXTENSIONS
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 # ---------------- STARTUP EVENT (LOAD MODELS ONCE) ----------------
@@ -55,10 +63,17 @@ def load_models():
 
 # ---------------- ROOT ENDPOINT ----------------
 @app.get("/")
-def health_check():
+def root_status():
     return {
         "status": "running",
         "message": "SmartPack AI Backend is online!"
+    }
+
+@app.get("/health")
+def health_check():
+    return {
+        "status": "healthy",
+        "message": "Backend health check passed.",
     }
 
 
@@ -81,8 +96,8 @@ async def analyze_package(
         raise HTTPException(status_code=400, detail="Real width must be greater than zero.")
 
     # 3️⃣ Save uploaded files temporarily
-    upload_folder = DevelopmentConfig.UPLOAD_FOLDER
-    os.makedirs(upload_folder, exist_ok=True)
+    upload_folder = UPLOAD_FOLDER
+    os.makedirs(str(upload_folder), exist_ok=True)
 
     front_path = os.path.join(upload_folder, front_image.filename)
     top_path = os.path.join(upload_folder, top_image.filename)

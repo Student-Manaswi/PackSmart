@@ -1,0 +1,12 @@
+﻿services:
+  - type: web
+    name: packsmart-backend
+    env: python
+    region: oregon
+    branch: main
+    root: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    autoDeploy: true
+    instanceType: starter
+    healthCheckPath: /health

@@ -7,12 +7,12 @@ import os
 import numpy as np
 from torchvision import models, transforms
 
-def get_model_path():
-    # Go up 2 levels from backend/modules to root
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    return os.path.join(base_dir, "models", "efficientnetb4_best_model.pth")
-
-MODEL_PATH = get_model_path()
+from config import (
+    MATERIAL_MODEL_FILENAME,
+    MATERIAL_MODEL_SOURCE,
+    OBJECT_CATEGORY_PATH,
+)
+from modules.model_loader import ensure_local_model_file
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -44,9 +44,7 @@ def get_object_category(object_name, json_path=None):
 
     try:
         if json_path is None:
-            # Go up 3 levels from backend/modules to root
-            base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-            json_path = os.path.join(base_dir, "data", "object_categories.json")
+            json_path = OBJECT_CATEGORY_PATH
         with open(json_path, "r") as f:
             data = json.load(f)
 
@@ -79,7 +77,11 @@ def load_material_model():
             num_classes
         )
 
-        checkpoint = torch.load(MODEL_PATH, map_location=device)
+        model_path = ensure_local_model_file(
+            MATERIAL_MODEL_SOURCE,
+            MATERIAL_MODEL_FILENAME,
+        )
+        checkpoint = torch.load(model_path, map_location=device)
 
         state_dict = checkpoint.get("model_state_dict", checkpoint)
 
@@ -122,6 +124,9 @@ def predict_material(image_path, object_name):
         fragility
     }
     """
+
+    if _model_material is None:
+        load_material_model()
 
     image = cv2.imread(image_path)
     if image is None:
