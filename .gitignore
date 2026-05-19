@@ -6,6 +6,7 @@ __pycache__/
 
 # Node
 node_modules/
+PackSmart\tokens.txt
 
 # Uploads & outputs
 backend/uploads/
