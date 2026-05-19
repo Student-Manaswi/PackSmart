@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+/backend/__pycache__/config.cpython-312.pyc
+
+# Node
+node_modules/
+
+# Uploads & outputs
+backend/uploads/
+
+
+# Environment
+/venv
+.env
+
+
+# OS files
+.DS_Store
+Thumbs.db
+backend/outputs/
+backend/uploaded_images/

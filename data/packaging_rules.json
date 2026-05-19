@@ -1,0 +1,21 @@
+{
+  "weight_categories_kg": {
+    "light": 1,
+    "medium": 5,
+    "heavy": 20
+  },
+
+  "outer_packaging_by_weight": {
+    "light":  "Single Panel Cardboard Box",
+    "medium": "4 panel Cardboard Box",
+    "heavy": "Plywood Crate"
+  },
+
+  "inner_packaging_rules": {
+    "Electronics":"Edge-Protector",
+    "Furniture":"Bubble-Wrap",
+    "Heavy_machinery":"FoamSheet-Wrap",
+    "Fragile": "Bubble-Wrap",
+    "Consumer-Goods":"None"
+  }
+}
