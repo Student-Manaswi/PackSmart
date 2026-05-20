@@ -1547,25 +1547,25 @@ function DetectionPage({ appData, currentPage, setCurrentPage }: PageProps) {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {/* LEFT CARD — image fills full card height */}
-          <Card className="border-0 shadow-xl bg-white/90 backdrop-blur-sm flex flex-col w-full h-auto lg:w-full lg:min-h-[660px]">
+          <Card className="border-0 shadow-xl bg-white/90 backdrop-blur-sm flex flex-col w-full h-[500px] lg:h-[660px]">
             <CardHeader className="flex-shrink-0">
               <CardTitle className="flex items-center space-x-2">
                 <Scan className="w-5 h-5 text-green-600" />
                 <span>Object Detection Results</span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex-1 pb-6 px-6 overflow-hidden">
+            <CardContent className="flex-1 pb-6 px-6 overflow-hidden flex items-center justify-center">
               {appData.annotatedImageUrl ? (
                 <img
                   src={appData.annotatedImageUrl}
                   alt="Annotated detection"
-                  className="w-full h-full object-cover rounded-xl"
+                  className="max-w-full max-h-full object-contain rounded-xl"
                 />
               ) : appData.frontViewImage?.url ? (
                 <ImageWithFallback
                   src={appData.frontViewImage.url}
                   alt="Detected object"
-                  className="w-full h-full object-cover rounded-xl"
+                  className="max-w-full max-h-full object-contain rounded-xl"
                 />
               ) : (
                 <div className="w-full h-full rounded-xl bg-gray-100 flex items-center justify-center text-gray-500">
@@ -1576,14 +1576,14 @@ function DetectionPage({ appData, currentPage, setCurrentPage }: PageProps) {
           </Card>
 
           {/* RIGHT CARD — green detected box on top, then dimensions */}
-          <Card className="border-0 shadow-xl bg-white/90 backdrop-blur-sm flex flex-col w-full h-auto lg:w-full lg:min-h-[660px]">
+          <Card className="border-0 shadow-xl bg-white/90 backdrop-blur-sm flex flex-col w-full h-[500px] lg:h-[660px]">
             <CardHeader className="flex-shrink-0">
               <CardTitle className="flex items-center space-x-2">
                 <Ruler className="w-5 h-5 text-blue-600" />
                 <span>Calculated Dimensions</span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex-1 space-y-4 overflow-auto px-6 pb-6">
+            <CardContent className="flex-1 space-y-4 overflow-y-auto px-6 pb-6 pr-3">
               {/* GREEN DETECTED OBJECT BOX */}
               <div className="bg-gradient-to-br from-green-50 to-teal-50 rounded-xl p-6 border border-green-200">
                 <Label className="text-sm text-gray-600 mb-2 block">
