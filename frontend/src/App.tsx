@@ -53,9 +53,7 @@ import PackSmart3D, { BoxType } from "./components/PackSmart3D";
 import { formatDimension } from "./utils/formatDimension";
 
 const env = (import.meta as any).env || {};
-const API_URL =
-  env.VITE_API_URL || env.NEXT_PUBLIC_API_URL || "https://packsmart-1-bs3l.onrender.com";
-
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 type Page =
   | "landing"
   | "about"
