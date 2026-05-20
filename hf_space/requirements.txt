@@ -1,0 +1,9 @@
+fastapi>=0.95.0
+uvicorn[standard]>=0.22.0
+python-multipart
+Pillow
+torch
+torchvision
+huggingface_hub
+ultralytics
+timm
