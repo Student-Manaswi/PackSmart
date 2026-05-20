@@ -54,6 +54,21 @@ import { formatDimension } from "./utils/formatDimension";
 
 const env = (import.meta as any).env || {};
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
+async function parseJsonResponse(response: Response) {
+  const text = await response.text();
+  const contentType = response.headers.get("content-type") || "";
+  if (
+    !contentType.includes("application/json") &&
+    text.trim().startsWith("<")
+  ) {
+    throw new Error(
+      `Expected JSON response but received HTML. This usually means the frontend is calling the wrong backend URL or the endpoint returned an HTML error page.`,
+    );
+  }
+  return JSON.parse(text);
+}
+
 type Page =
   | "landing"
   | "about"
@@ -883,11 +898,11 @@ function CapturePage({
       });
 
       if (!response.ok) {
-        const err = await response.json();
+        const err = await parseJsonResponse(response);
         throw new Error(err.detail || "Backend error");
       }
 
-      const result = await response.json();
+      const result = await parseJsonResponse(response);
       const data = result.data;
 
       setAppData((prev) => ({
@@ -1699,13 +1714,13 @@ function MaterialsPage({
       });
 
       if (!response.ok) {
-        const err = await response.json();
+        const err = await parseJsonResponse(response);
         throw new Error(
           err.detail || "Backend error parsing Stage 2 instructions.",
         );
       }
 
-      const result = await response.json();
+      const result = await parseJsonResponse(response);
       const data = result.data;
 
       if (!data || !data.packaging) {
