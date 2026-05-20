@@ -5,8 +5,8 @@ import os
 
 def load_rules(json_path=None):
     if json_path is None:
-        # Go up 3 levels from backend/modules to root
-        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        # Go up 2 levels from backend/modules to backend folder
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         json_path = os.path.join(base_dir, "data", "packaging_rules.json")
     with open(json_path, "r") as f:
         return json.load(f)

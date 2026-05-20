@@ -1,0 +1,30 @@
+{
+  "class_category_mapping": {
+    "Electronics": [
+      "Blender",
+      "Camera",
+      "Computer_Mouse",
+      "Headphones",
+      "Iron",
+      "Laptop",
+      "Mobile_phone",
+      "Oven",
+      "Refrigerator",
+      "Washing Machine",
+      "Television",
+      "Mixer"
+    ],
+
+    "Furniture": ["Chair", "Table"],
+
+    "Glass_items": ["Glass_utensils", "Vase"],
+
+    "Kitchenware": ["Bottle", "Cooker", "Cup", "Gas Stove", "Plate"],
+
+    "Heavy_machinery": ["Hydraulic_components", "Transmission", "Battery"],
+
+    "Books_stationery": ["Book", "Calculator", "Sharpener"],
+
+    "Miscellaneous": ["Clock", "Bicycle", "Helmet"]
+  }
+}

@@ -1547,10 +1547,7 @@ function DetectionPage({ appData, currentPage, setCurrentPage }: PageProps) {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {/* LEFT CARD — image fills full card height */}
-          <Card
-            className="border-0 shadow-xl bg-white/90 backdrop-blur-sm flex flex-col"
-            style={{ width: "550px", height: "660px" }}
-          >
+          <Card className="border-0 shadow-xl bg-white/90 backdrop-blur-sm flex flex-col w-full h-auto lg:w-full lg:min-h-[660px]">
             <CardHeader className="flex-shrink-0">
               <CardTitle className="flex items-center space-x-2">
                 <Scan className="w-5 h-5 text-green-600" />
@@ -1579,10 +1576,7 @@ function DetectionPage({ appData, currentPage, setCurrentPage }: PageProps) {
           </Card>
 
           {/* RIGHT CARD — green detected box on top, then dimensions */}
-          <Card
-            className="border-0 shadow-xl bg-white/90 backdrop-blur-sm flex flex-col"
-            style={{ width: "550px", height: "660px" }}
-          >
+          <Card className="border-0 shadow-xl bg-white/90 backdrop-blur-sm flex flex-col w-full h-auto lg:w-full lg:min-h-[660px]">
             <CardHeader className="flex-shrink-0">
               <CardTitle className="flex items-center space-x-2">
                 <Ruler className="w-5 h-5 text-blue-600" />
@@ -3081,15 +3075,31 @@ export default function App() {
 
   return (
     <div>
-      {currentPage === "landing" && <LandingPage {...pageProps} />}
-      {currentPage === "about" && <AboutPage setCurrentPage={setCurrentPage} />}
-      {currentPage === "capture" && <CapturePage {...pageProps} />}
-      {currentPage === "camera" && <CameraPage {...pageProps} />}
-      {currentPage === "detection" && <DetectionPage {...pageProps} />}
-      {currentPage === "materials" && <MaterialsPage {...pageProps} />}
-      {currentPage === "packaging" && <PackagingPage {...pageProps} />}
-      {currentPage === "bom" && <BOMPage {...pageProps} />}
-      {currentPage === "pricing" && <PricingPage {...pageProps} />}
+      <AnimatePresence mode="wait">
+        {currentPage === "landing" && (
+          <LandingPage key="landing" {...pageProps} />
+        )}
+        {currentPage === "about" && (
+          <AboutPage key="about" setCurrentPage={setCurrentPage} />
+        )}
+        {currentPage === "capture" && (
+          <CapturePage key="capture" {...pageProps} />
+        )}
+        {currentPage === "camera" && <CameraPage key="camera" {...pageProps} />}
+        {currentPage === "detection" && (
+          <DetectionPage key="detection" {...pageProps} />
+        )}
+        {currentPage === "materials" && (
+          <MaterialsPage key="materials" {...pageProps} />
+        )}
+        {currentPage === "packaging" && (
+          <PackagingPage key="packaging" {...pageProps} />
+        )}
+        {currentPage === "bom" && <BOMPage key="bom" {...pageProps} />}
+        {currentPage === "pricing" && (
+          <PricingPage key="pricing" {...pageProps} />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
