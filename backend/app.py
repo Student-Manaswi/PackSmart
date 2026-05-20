@@ -1,5 +1,5 @@
 import os
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from typing import Optional
@@ -58,6 +58,7 @@ def health_check():
 # ---------------- STAGE 1: DETECTION ENDPOINT ----------------
 @app.post("/api/analyze")
 async def analyze_package(
+    request: Request,
     front_image: UploadFile = File(...),
     top_image: UploadFile = File(...),
     real_width_cm: float = Form(...)
@@ -90,7 +91,15 @@ async def analyze_package(
         # 4️⃣ Run detection pipeline (Stage 1 only)
         result = run_detection_pipeline(front_path, top_path, real_width_cm)
 
-        # 5️⃣ Clean up temp uploaded files
+        # 5️⃣ Build public URL for the saved annotated image (if present)
+        if result.get("bbox_image_path"):
+            image_name = os.path.basename(result["bbox_image_path"])
+            try:
+                result["bbox_image_url"] = request.url_for("outputs", path=image_name)
+            except Exception:
+                result["bbox_image_url"] = str(request.base_url).rstrip("/") + f"/outputs/{image_name}"
+
+        # 6️⃣ Clean up temp uploaded files
         if os.path.exists(front_path):
             os.remove(front_path)
         if os.path.exists(top_path):

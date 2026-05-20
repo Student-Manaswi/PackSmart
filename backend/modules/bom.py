@@ -1,7 +1,18 @@
 import json
+from pathlib import Path
 
 
-def load_prices(json_path="../data/pricing.json"):
+BASE_DIR = Path(__file__).resolve().parents[1]
+DATA_DIR = BASE_DIR / "data"
+
+
+def get_data_path(filename):
+    return DATA_DIR / filename
+
+
+def load_prices(json_path=None):
+    if json_path is None:
+        json_path = get_data_path("pricing.json")
     with open(json_path, "r") as f:
         return json.load(f)
 
@@ -9,7 +20,7 @@ def load_prices(json_path="../data/pricing.json"):
 def generate_bom(packaging_material,
                  adjusted_dimensions,
                  protection_layer,
-                 price_file="../data/pricing.json"):
+                 price_file=None):
 
     prices = load_prices(price_file)
     bom = []

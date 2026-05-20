@@ -907,9 +907,11 @@ function CapturePage({
 
       setAppData((prev) => ({
         ...prev,
-        annotatedImageUrl: data.bbox_image_path
-          ? `${API_URL}/outputs/${data.bbox_image_path.split(/[\\/]/).pop()}`
-          : null,
+        annotatedImageUrl: data.bbox_image_url
+          ? data.bbox_image_url
+          : data.bbox_image_path
+            ? `${API_URL}/outputs/${data.bbox_image_path.split(/[\\/]/).pop()}`
+            : null,
         detectedObject: data.object_name || "Detected Object",
         confidence: data.object_confidence ?? prev.confidence,
         dimensions: {
