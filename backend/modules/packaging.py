@@ -1,13 +1,12 @@
 import json
-import os
+from pathlib import Path
 
 # Load Packaging Rules
 
 def load_rules(json_path=None):
     if json_path is None:
-        # Go up 2 levels from backend/modules to backend folder
-        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        json_path = os.path.join(base_dir, "data", "packaging_rules.json")
+        data_dir = Path(__file__).resolve().parents[1] / "data"
+        json_path = data_dir / "packaging_rules.json"
     with open(json_path, "r") as f:
         return json.load(f)
 
