@@ -930,11 +930,17 @@ function CapturePage({
         (data.bbox_image_path
           ? `https://manaswi163-packsmart-backend.hf.space${data.bbox_image_path}`
           : null);
-      console.log("=== FINAL imageUrl ===", imageUrl);
+
+      // Force HTTPS for all image URLs
+      const secureImageUrl =
+        imageUrl && typeof imageUrl === "string"
+          ? imageUrl.replace("http://", "https://")
+          : imageUrl;
+      console.log("=== FINAL imageUrl ===", secureImageUrl);
 
       setAppData((prev) => ({
         ...prev,
-        annotatedImageUrl: imageUrl,
+        annotatedImageUrl: secureImageUrl,
         detectedObject: data.object_name || "Detected Object",
         confidence: data.object_confidence ?? prev.confidence,
         dimensions: {
