@@ -921,22 +921,15 @@ function CapturePage({
         typeof data.bbox_image_path,
       );
 
-      // Ensure bbox_image_url is a string
-      let imageUrl: string | null = null;
-      if (data.bbox_image_url) {
-        if (typeof data.bbox_image_url === "string") {
-          imageUrl = data.bbox_image_url;
-        } else if (
-          typeof data.bbox_image_url === "object" &&
-          data.bbox_image_url.path
-        ) {
-          imageUrl = data.bbox_image_url.path;
-        } else {
-          imageUrl = String(data.bbox_image_url);
-        }
-      } else if (data.bbox_image_path) {
-        imageUrl = `${API_URL}/outputs/${data.bbox_image_path.split(/[\\/]/).pop()}`;
-      }
+      // Extract bbox_image_url, handling both string and {_url: '...'} object format
+      const imageUrl =
+        (typeof data.bbox_image_url === "object"
+          ? data.bbox_image_url?._url
+          : data.bbox_image_url) ||
+        data.bbox_image_url ||
+        (data.bbox_image_path
+          ? `https://manaswi163-packsmart-backend.hf.space${data.bbox_image_path}`
+          : null);
       console.log("=== FINAL imageUrl ===", imageUrl);
 
       setAppData((prev) => ({
