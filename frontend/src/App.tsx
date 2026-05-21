@@ -905,13 +905,43 @@ function CapturePage({
       const result = await parseJsonResponse(response);
       const data = result.data;
 
+      // Debug: Log the full API response
+      console.log("=== FULL API RESPONSE ===", result);
+      console.log("=== DATA OBJECT ===", data);
+      console.log(
+        "=== bbox_image_url ===",
+        data.bbox_image_url,
+        "type:",
+        typeof data.bbox_image_url,
+      );
+      console.log(
+        "=== bbox_image_path ===",
+        data.bbox_image_path,
+        "type:",
+        typeof data.bbox_image_path,
+      );
+
+      // Ensure bbox_image_url is a string
+      let imageUrl: string | null = null;
+      if (data.bbox_image_url) {
+        if (typeof data.bbox_image_url === "string") {
+          imageUrl = data.bbox_image_url;
+        } else if (
+          typeof data.bbox_image_url === "object" &&
+          data.bbox_image_url.path
+        ) {
+          imageUrl = data.bbox_image_url.path;
+        } else {
+          imageUrl = String(data.bbox_image_url);
+        }
+      } else if (data.bbox_image_path) {
+        imageUrl = `${API_URL}/outputs/${data.bbox_image_path.split(/[\\/]/).pop()}`;
+      }
+      console.log("=== FINAL imageUrl ===", imageUrl);
+
       setAppData((prev) => ({
         ...prev,
-        annotatedImageUrl: data.bbox_image_url
-          ? data.bbox_image_url
-          : data.bbox_image_path
-            ? `${API_URL}/outputs/${data.bbox_image_path.split(/[\\/]/).pop()}`
-            : null,
+        annotatedImageUrl: imageUrl,
         detectedObject: data.object_name || "Detected Object",
         confidence: data.object_confidence ?? prev.confidence,
         dimensions: {
